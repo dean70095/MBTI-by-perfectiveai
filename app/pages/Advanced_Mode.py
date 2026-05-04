@@ -261,7 +261,7 @@ st.markdown('<div class="page-sub">Four ways to interrogate the model with your 
 # Mode switcher — same component as the simple page, with Advanced active.
 st.markdown(
     '<div class="mode-switcher">'
-    '<a class="mode-pill" href="/" target="_self">'
+    '<a class="mode-pill" href="/" target="_top">'
     '<span class="accent">←</span> Simple</a>'
     '<span class="mode-pill active">Advanced</span>'
     '</div>',

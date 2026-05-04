@@ -227,7 +227,7 @@ st.markdown(
 st.markdown(
     '<div class="mode-switcher">'
     '<span class="mode-pill active">Simple</span>'
-    '<a class="mode-pill" href="/Advanced_Mode" target="_self">'
+    '<a class="mode-pill" href="/Advanced_Mode" target="_top">'
     'Advanced <span class="accent">→</span></a>'
     '</div>',
     unsafe_allow_html=True,
