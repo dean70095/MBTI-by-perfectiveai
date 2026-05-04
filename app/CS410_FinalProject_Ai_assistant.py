@@ -13,10 +13,12 @@ PROJ_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(PROJ_ROOT))
 from models.dichotomy_classifiers import DichotomyClassifiers, DIM_LABELS  # noqa: E402
 
-RESULTS_DIR = PROJ_ROOT / "results"
+# Single source of truth for `load_model` — its cache survives page navigation.
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+from _shared import load_model  # noqa: E402
 
 # ---------------------------------------------------------------------------
-# Text cleanup + model
+# Text cleanup
 # ---------------------------------------------------------------------------
 
 URL_RE = re.compile(r"https?://\S+|www\.\S+")
@@ -34,13 +36,6 @@ def clean_text(text: str) -> str:
     text = MBTI_RE.sub(" ", text)
     text = NON_ALPHA_RE.sub(" ", text)
     return re.sub(r"\s+", " ", text).strip()
-
-
-@st.cache_resource(show_spinner="Warming up…")
-def load_model() -> DichotomyClassifiers:
-    clf = DichotomyClassifiers()
-    clf.load(RESULTS_DIR)
-    return clf
 
 
 def signal_words(clf: DichotomyClassifiers, dim: int, cleaned_text: str, k: int = 4):

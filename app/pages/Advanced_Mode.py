@@ -20,10 +20,13 @@ PROJ_ROOT = Path(__file__).resolve().parent.parent.parent
 sys.path.insert(0, str(PROJ_ROOT))
 from models.dichotomy_classifiers import DichotomyClassifiers, DIM_LABELS  # noqa: E402
 
-RESULTS_DIR = PROJ_ROOT / "results"
+# Shared loader — same cache key as the simple page, so the model
+# stays warm when navigating between pages.
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+from _shared import load_model  # noqa: E402
 
 # ---------------------------------------------------------------------------
-# Cleaning, model, profiles
+# Cleaning, profiles
 # ---------------------------------------------------------------------------
 
 URL_RE = re.compile(r"https?://\S+|www\.\S+")
@@ -41,13 +44,6 @@ def clean_text(text: str) -> str:
     text = MBTI_RE.sub(" ", text)
     text = NON_ALPHA_RE.sub(" ", text)
     return re.sub(r"\s+", " ", text).strip()
-
-
-@st.cache_resource(show_spinner="Warming up…")
-def load_model() -> DichotomyClassifiers:
-    clf = DichotomyClassifiers()
-    clf.load(RESULTS_DIR)
-    return clf
 
 
 AXIS_NAMES = {
@@ -282,22 +278,20 @@ tab_live, tab_signals, tab_refine, tab_compare = st.tabs(
 # Tab 1 — Live prediction (re-runs on each text update)
 # ---------------------------------------------------------------------------
 with tab_live:
-    st.caption(
-        "Type below — your reading refreshes every time you pause or click outside the box. "
-        "(Streamlit re-runs on each edit; press Ctrl/Cmd+Enter to force a refresh.)"
-    )
+    st.caption("Type below, then click Analyze. Your reading also auto-updates whenever you click outside the text box.")
     col_in, col_out = st.columns([1.1, 1])
     with col_in:
         live_text = st.text_area(
             "Your text",
             key="live_text",
-            height=320,
+            height=280,
             placeholder="Start typing — a few sentences works best.",
             label_visibility="collapsed",
         )
+        st.button("Analyze", key="live_go", type="primary", use_container_width=True)
     with col_out:
         if not live_text or len(live_text.strip()) < 30:
-            st.info("Write at least a few sentences to see a live reading.")
+            st.info("Write at least a few sentences to see a reading.")
         else:
             result = predict_full(clf, live_text)
             if result is None:
@@ -333,6 +327,7 @@ with tab_signals:
         placeholder="Paste a few sentences here.",
         label_visibility="collapsed",
     )
+    st.button("Analyze", key="signals_go", type="primary", use_container_width=True)
     if sig_text and len(sig_text.strip()) >= 30:
         result = predict_full(clf, sig_text)
         if result:
@@ -367,6 +362,7 @@ with tab_refine:
         height=120,
         placeholder="Append a continuation, an unrelated thought, anything…",
     )
+    st.button("Analyze", key="refine_go", type="primary", use_container_width=True)
 
     if base_text and len(base_text.strip()) >= 30:
         base_result = predict_full(clf, base_text)
@@ -431,6 +427,7 @@ with tab_compare:
             height=240,
             placeholder="Second passage — e.g. how you write at work.",
         )
+    st.button("Analyze", key="compare_go", type="primary", use_container_width=True)
 
     a_ok = text_a and len(text_a.strip()) >= 30
     b_ok = text_b and len(text_b.strip()) >= 30
