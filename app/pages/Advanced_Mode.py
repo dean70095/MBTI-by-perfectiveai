@@ -259,9 +259,12 @@ st.markdown('<div class="page-sub">Four ways to interrogate the model with your 
             unsafe_allow_html=True)
 
 # Mode switcher — same component as the simple page, with Advanced active.
+# Inline onclick handler navigates via the top window so the link works
+# reliably whether or not Streamlit serves the app inside an iframe.
 st.markdown(
     '<div class="mode-switcher">'
-    '<a class="mode-pill" href="/" target="_top">'
+    '<a class="mode-pill" href="/" '
+    'onclick="(window.top||window).location.href=\'/\';return false;">'
     '<span class="accent">←</span> Simple</a>'
     '<span class="mode-pill active">Advanced</span>'
     '</div>',

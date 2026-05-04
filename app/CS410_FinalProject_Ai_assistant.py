@@ -224,10 +224,13 @@ st.markdown(
 )
 
 # Mode switcher — places the choice front-and-center under the hero.
+# Uses an inline onclick handler so navigation works reliably whether or not
+# Streamlit Cloud serves the app inside an iframe.
 st.markdown(
     '<div class="mode-switcher">'
     '<span class="mode-pill active">Simple</span>'
-    '<a class="mode-pill" href="/Advanced_Mode" target="_top">'
+    '<a class="mode-pill" href="/Advanced_Mode" '
+    'onclick="(window.top||window).location.href=\'/Advanced_Mode\';return false;">'
     'Advanced <span class="accent">→</span></a>'
     '</div>',
     unsafe_allow_html=True,
