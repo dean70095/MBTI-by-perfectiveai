@@ -194,35 +194,27 @@ st.markdown(
     /* Hide Streamlit's auto-generated multipage sidebar so only our explicit nav shows. */
     [data-testid="stSidebar"] { display: none !important; }
     [data-testid="stSidebarNav"] { display: none !important; }
-    /* Top-right "Try Advanced" button styling. */
-    .top-actions {
-        display: flex; justify-content: flex-end; margin-bottom: 0.6rem;
+    /* Mode switcher pills (Simple / Advanced) */
+    .mode-switcher {
+        display: inline-flex; padding: 4px; gap: 4px;
+        background: #F1F5F9; border-radius: 999px;
+        margin: 0.25rem 0 1.5rem 0;
     }
-    .advanced-link {
+    .mode-pill {
         display: inline-flex; align-items: center; gap: 6px;
-        padding: 8px 16px; border-radius: 999px; font-weight: 600;
-        font-size: 0.9rem; color: white;
-        background: linear-gradient(135deg, #1E3A8A 0%, #F97316 100%);
-        text-decoration: none;
-        box-shadow: 0 4px 12px rgba(30,58,138,0.18);
-        transition: transform 180ms ease, box-shadow 180ms ease;
+        padding: 9px 22px; border-radius: 999px;
+        font-size: 0.92rem; font-weight: 600;
+        color: #64748B; text-decoration: none;
+        transition: color 160ms ease, background 160ms ease;
     }
-    .advanced-link:hover {
-        transform: translateY(-1px);
-        box-shadow: 0 6px 18px rgba(30,58,138,0.28);
-        color: white;
+    .mode-pill:hover { color: #1E3A8A; }
+    .mode-pill.active {
+        background: white; color: #1E3A8A;
+        box-shadow: 0 2px 6px rgba(30,58,138,0.10);
     }
+    .mode-pill .accent { color: #F97316; }
     </style>
     """,
-    unsafe_allow_html=True,
-)
-
-# Top-right link to the advanced page (one-way; the advanced page has its own back link).
-st.markdown(
-    '<div class="top-actions">'
-    '<a class="advanced-link" href="/Advanced_Mode" target="_self">'
-    '✨ Try Advanced Mode →</a>'
-    '</div>',
     unsafe_allow_html=True,
 )
 
@@ -233,6 +225,16 @@ st.markdown(
 st.markdown(
     '<div class="hero-sub">Share a few sentences in your own voice. We\'ll read between the lines '
     'and tailor what we say back to you.</div>',
+    unsafe_allow_html=True,
+)
+
+# Mode switcher — places the choice front-and-center under the hero.
+st.markdown(
+    '<div class="mode-switcher">'
+    '<span class="mode-pill active">Simple</span>'
+    '<a class="mode-pill" href="/Advanced_Mode" target="_self">'
+    'Advanced <span class="accent">→</span></a>'
+    '</div>',
     unsafe_allow_html=True,
 )
 

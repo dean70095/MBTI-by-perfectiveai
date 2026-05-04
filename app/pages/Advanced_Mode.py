@@ -210,12 +210,24 @@ st.markdown(
     .block-container { padding-top: 1.5rem; max-width: 1200px; }
     [data-testid="stSidebar"] { display: none !important; }
     [data-testid="stSidebarNav"] { display: none !important; }
-    .back-link {
-        display: inline-flex; align-items: center; gap: 6px;
-        font-size: 0.88rem; color: #475569; text-decoration: none;
-        font-weight: 600;
+    .mode-switcher {
+        display: inline-flex; padding: 4px; gap: 4px;
+        background: #F1F5F9; border-radius: 999px;
+        margin: 0.25rem 0 1.2rem 0;
     }
-    .back-link:hover { color: #1E3A8A; }
+    .mode-pill {
+        display: inline-flex; align-items: center; gap: 6px;
+        padding: 9px 22px; border-radius: 999px;
+        font-size: 0.92rem; font-weight: 600;
+        color: #64748B; text-decoration: none;
+        transition: color 160ms ease, background 160ms ease;
+    }
+    .mode-pill:hover { color: #1E3A8A; }
+    .mode-pill.active {
+        background: white; color: #1E3A8A;
+        box-shadow: 0 2px 6px rgba(30,58,138,0.10);
+    }
+    .mode-pill .accent { color: #F97316; }
     .page-title {
         font-size: 2rem; font-weight: 800; color: #1E3A8A;
         margin: 0.5rem 0 0.25rem 0;
@@ -246,11 +258,19 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-st.markdown('<a class="back-link" href="/" target="_self">← Back to simple mode</a>',
-            unsafe_allow_html=True)
 st.markdown('<div class="page-title">Advanced Mode</div>', unsafe_allow_html=True)
 st.markdown('<div class="page-sub">Four ways to interrogate the model with your own writing.</div>',
             unsafe_allow_html=True)
+
+# Mode switcher — same component as the simple page, with Advanced active.
+st.markdown(
+    '<div class="mode-switcher">'
+    '<a class="mode-pill" href="/" target="_self">'
+    '<span class="accent">←</span> Simple</a>'
+    '<span class="mode-pill active">Advanced</span>'
+    '</div>',
+    unsafe_allow_html=True,
+)
 
 clf = load_model()
 
