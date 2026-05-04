@@ -1,0 +1,19 @@
+.DS_Store
+__pycache__/
+*.pyc
+*.pyo
+
+# Local Python envs
+.venv/
+venv/
+.env
+
+# Streamlit secrets
+.streamlit/secrets.toml
+
+# Editor
+.vscode/
+.idea/
+
+# PowerPoint backups from local edits
+*.backup-*.pptx
